@@ -16,9 +16,8 @@ datasource db {
 model User {
   id             String         @id @default(cuid())
   email          String         @unique
-  habits         Habit[]
-  completions    Completion[]
-  subscription   Subscription?
+
+  @@map("users") // 👈 This tells Prisma to use the existing users table
 }
 
 model Habit {
@@ -26,7 +25,6 @@ model Habit {
   title          String
   createdAt      DateTime       @default(now())
   userId         String
-  user           User           @relation(fields: [userId], references: [id])
   completions    Completion[]
 }
 
@@ -36,7 +34,6 @@ model Completion {
   habitId        String
   userId         String
   habit          Habit          @relation(fields: [habitId], references: [id])
-  user           User           @relation(fields: [userId], references: [id])
 }
 
 model Subscription {
@@ -47,5 +44,4 @@ model Subscription {
   plan           String
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
-  user           User           @relation(fields: [userId], references: [id])
 }
