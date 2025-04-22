@@ -1,6 +1,12 @@
+import HabitList from "@/components/HabitList";
+import HabitSkeletonList from "@/components/HabitSkeletonList";
+import { Suspense } from "react";
 // app/dashboard/page.tsx
-import { AddHabitForm } from "@/components/AddHabitForm";
+// import { AddHabitForm } from "@/components/AddHabitForm";
+// import { CheckIcon } from "@heroicons/react/24/solid"; // if using Heroicons
+// import ToggleHabit from "@/components/ToggleHabit";
 import { auth } from "@clerk/nextjs/server";
+// import { calculateStreak } from "@/lib/utils/streak";
 import { db } from "@/lib/db";
 
 export default async function DashboardPage() {
@@ -9,33 +15,15 @@ export default async function DashboardPage() {
 
   const habits = await db.habit.findMany({
     where: { userId },
+    include: {
+      completions: true, // all completions, not just today's
+    },
     orderBy: { createdAt: "desc" },
   });
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Your Habits</h1>
-
-      {/* 🔹 Show Add Habit form */}
-      <AddHabitForm />
-
-      {/* 🔹 List user's habits */}
-      <ul className="space-y-2">
-        {habits.length === 0 ? (
-          <div className="text-center text-gray-500 italic p-4 border border-dashed rounded bg-gray-50">
-            No habits yet. Add one to get started!
-          </div>
-        ) : (
-          habits.map((habit) => (
-            <li
-              key={habit.id}
-              className="bg-white border px-4 py-2 rounded shadow-sm animate-fade-in"
-            >
-              {habit.title}
-            </li>
-          ))
-        )}
-      </ul>
-    </div>
+    <Suspense fallback={<HabitSkeletonList />}>
+      <HabitList habits={habits} />
+    </Suspense>
   );
 }

@@ -24,21 +24,35 @@ const Spinner = () => (
   </svg>
 );
 
-export const SaveButton = () => {
+type ButtonProps = {
+  children?: React.ReactNode;
+  type: "button" | "submit";
+  onClick?: () => void;
+  disabled?: boolean;
+  className?: string;
+};
+
+export const SaveButton = ({
+  onClick,
+  children,
+  disabled,
+  type,
+}: ButtonProps) => {
   const { pending } = useFormStatus();
 
   return (
     <button
-      type="submit"
-      disabled={pending}
-      className={`flex items-center px-4 py-2 rounded text-white transition-all duration-300 ease-in-out ${
+      onClick={onClick ? () => onClick() : undefined}
+      type={type}
+      disabled={disabled ? disabled : pending}
+      className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold shadow-sm hover:cursor-pointer transition-all duration-300 ease-in-out ${
         pending
-          ? "bg-blue-400 cursor-not-allowed"
-          : "bg-blue-500 hover:bg-blue-600 hover:cursor-pointer"
+          ? "bg-blue-300 text-white cursor-not-allowed"
+          : "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-md"
       }`}
     >
       {pending && <Spinner />}
-      Save
+      {children ? children : "Save"}
     </button>
   );
 };

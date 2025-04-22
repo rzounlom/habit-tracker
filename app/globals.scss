@@ -12,4 +12,35 @@
       transform: translateY(0);
     }
   }
+
+  @keyframes popIn {
+    0% {
+      transform: scale(0.5);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .animate-pop-in {
+    animation: popIn 0.25s ease-out;
+  }
+
+  @keyframes pulseOnce {
+    0% {
+      opacity: 0.3;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.3;
+    }
+  }
+
+  .animate-pulse-once {
+    animation: pulseOnce 0.7s ease-in-out;
+  }
 }
