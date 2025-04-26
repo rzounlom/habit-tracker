@@ -8,10 +8,28 @@ import { Suspense } from "react";
 import { auth } from "@clerk/nextjs/server";
 // import { calculateStreak } from "@/lib/utils/streak";
 import { db } from "@/lib/db";
+import { openai } from "@/lib/openai";
 
 export default async function DashboardPage() {
   const { userId } = await auth();
   if (!userId) return null;
+
+  const testOpenAI = async () => {
+    try {
+      const res = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+          { role: "user", content: "Give me 3 daily habits for productivity." },
+        ],
+      });
+
+      console.log(res.choices[0].message.content);
+    } catch (error) {
+      console.error("Error calling OpenAI:", error);
+    }
+  };
+
+  testOpenAI();
 
   const habits = await db.habit.findMany({
     where: { userId },
