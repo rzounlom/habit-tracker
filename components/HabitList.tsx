@@ -3,12 +3,15 @@ import { CheckIcon } from "@heroicons/react/24/solid";
 import { HabitWithCompletions } from "@/types";
 import ToggleHabit from "./ToggleHabit";
 import { calculateStreak } from "@/lib/utils/streak";
+import { getPast7Days } from "@/lib/utils/dates";
 
 interface HabitListProps {
   habits: HabitWithCompletions[];
 }
 
 export default function HabitList({ habits }: HabitListProps) {
+  const past7Days = getPast7Days();
+
   return (
     <div className="p-6 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Your Habits</h1>
@@ -61,6 +64,25 @@ export default function HabitList({ habits }: HabitListProps) {
                   {completedToday && (
                     <CheckIcon className="w-4 h-4 text-green-500 animate-pop-in ml-1" />
                   )}
+                </div>
+                {/* Weekly grid */}
+                <div className="flex gap-1">
+                  {past7Days.map((date, idx) => {
+                    const isComplete = habit.completions.some((c) => {
+                      const cDate = new Date(c.date).setHours(0, 0, 0, 0);
+                      return cDate === date.setHours(0, 0, 0, 0);
+                    });
+
+                    return (
+                      <div
+                        key={idx}
+                        className={`w-4 h-4 rounded-sm ${
+                          isComplete ? "bg-green-500" : "bg-gray-200"
+                        } animate-fade-up`}
+                        title={date.toDateString()}
+                      />
+                    );
+                  })}
                 </div>
 
                 {/* 🔥 Streak with pulse on update */}
