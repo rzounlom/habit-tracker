@@ -41,7 +41,7 @@ export default function CoachCardWrapper({
     fetchAdvice();
   }, []);
 
-  const canRegenerate = isSubscribed || promptCount < 3;
+  const canRegenerate = isSubscribed || promptCount < 5;
 
   return (
     <div className="space-y-4 relative">
@@ -51,7 +51,7 @@ export default function CoachCardWrapper({
           <div>
             {!isSubscribed ? (
               <span className="text-sm text-gray-600">
-                You’ve used {promptCount} of 3 free insights
+                You’ve used {promptCount} of 5 free insights
               </span>
             ) : (
               <span className="text-sm text-green-600 font-medium">
