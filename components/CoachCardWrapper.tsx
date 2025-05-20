@@ -70,7 +70,7 @@ export default function CoachCardWrapper({
               className={`flex items-center gap-2 px-4 py-2 rounded text-white transition-all duration-300 ease-in-out ${
                 refreshing
                   ? "bg-blue-400 cursor-not-allowed"
-                  : "bg-blue-500 hover:bg-blue-600"
+                  : "bg-blue-500 hover:bg-blue-600 cursor-pointer"
               }`}
             >
               {refreshing && (
