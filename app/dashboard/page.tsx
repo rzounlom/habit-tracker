@@ -1,35 +1,14 @@
 import HabitList from "@/components/HabitList";
 import HabitSkeletonList from "@/components/HabitSkeletonList";
+import Link from "next/link";
 import { Suspense } from "react";
-// app/dashboard/page.tsx
-// import { AddHabitForm } from "@/components/AddHabitForm";
-// import { CheckIcon } from "@heroicons/react/24/solid"; // if using Heroicons
-// import ToggleHabit from "@/components/ToggleHabit";
+import SyncUser from "@/components/SyncUser";
 import { auth } from "@clerk/nextjs/server";
-// import { calculateStreak } from "@/lib/utils/streak";
 import { db } from "@/lib/db";
-import { openai } from "@/lib/openai";
 
 export default async function DashboardPage() {
   const { userId } = await auth();
   if (!userId) return null;
-
-  const testOpenAI = async () => {
-    try {
-      const res = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [
-          { role: "user", content: "Give me 3 daily habits for productivity." },
-        ],
-      });
-
-      console.log(res.choices[0].message.content);
-    } catch (error) {
-      console.error("Error calling OpenAI:", error);
-    }
-  };
-
-  testOpenAI();
 
   const habits = await db.habit.findMany({
     where: { userId },
@@ -40,8 +19,26 @@ export default async function DashboardPage() {
   });
 
   return (
-    <Suspense fallback={<HabitSkeletonList />}>
-      <HabitList habits={habits} />
-    </Suspense>
+    <>
+      <SyncUser />
+      <Suspense fallback={<HabitSkeletonList />}>
+        <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg shadow-sm mb-6">
+          <h2 className="text-lg font-semibold text-blue-700 mb-2">
+            🧠 Try AI Habit Coach
+          </h2>
+          <p className="text-sm text-blue-800 mb-4">
+            Let GPT analyze your weekly patterns and give you personalized tips
+            to stay consistent.
+          </p>
+          <Link
+            href="/dashboard/ai-insights"
+            className="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          >
+            View AI Insights
+          </Link>
+        </div>
+        <HabitList habits={habits} />
+      </Suspense>
+    </>
   );
 }

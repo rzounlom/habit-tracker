@@ -1,3 +1,5 @@
+import { db } from "@/lib/db";
+
 export function generateHabitPrompt(
   habits: {
     title: string;

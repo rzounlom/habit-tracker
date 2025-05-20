@@ -9,13 +9,12 @@ interface HabitListProps {
   habits: HabitWithCompletions[];
 }
 
-export default function HabitList({ habits }: HabitListProps) {
+export default async function HabitList({ habits }: HabitListProps) {
   const past7Days = getPast7Days();
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Your Habits</h1>
-
       {/* 🔹 Show Add Habit form */}
       <AddHabitForm />
 
