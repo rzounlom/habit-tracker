@@ -1,19 +1,21 @@
-"use client";
-
 interface CoachCardProps {
   advice: string | null;
 }
 
 export default function CoachCard({ advice }: CoachCardProps) {
+  // 👉 While loading, show shimmer
   if (!advice) {
     return (
-      <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg shadow-sm mb-6 animate-pulse">
-        <p className="text-blue-700 text-sm">Loading insights...</p>
+      <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg shadow-sm mb-6 animate-pulse space-y-2">
+        <div className="h-4 w-1/3 bg-blue-200 rounded"></div>
+        <div className="h-3 w-full bg-blue-100 rounded"></div>
+        <div className="h-3 w-11/12 bg-blue-100 rounded"></div>
+        <div className="h-3 w-5/6 bg-blue-100 rounded"></div>
+        <div className="h-3 w-2/3 bg-blue-100 rounded"></div>
       </div>
     );
   }
 
-  // Check if advice is actually a "locked" message
   const isLocked = advice.startsWith("⚠️");
 
   if (isLocked) {
@@ -35,9 +37,9 @@ export default function CoachCard({ advice }: CoachCardProps) {
     );
   }
 
-  // Normal advice flow
+  // ✅ Normal advice display
   return (
-    <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg shadow-sm mb-6">
+    <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg shadow-sm mb-6 animate-fade-in">
       <h2 className="text-lg font-semibold text-blue-700 mb-2">
         🧠 AI Habit Coach
       </h2>
